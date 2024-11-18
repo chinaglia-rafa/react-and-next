@@ -1,27 +1,25 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import "./App.css";
 
 const App = () => {
-  const [count, setCount] = useState(0);
+  const [fullName, setFullName] = useState({ firstName: "", lastName: "" });
 
-  const handleCountClick = () => {
-    // Comandos do tipo setCount() são agrupados e executados "por último"
-    // Isso significa que ele vai acumular as alterações em um lote e, apenas
-    // no final, renderiza a tela novamente.
+  const handleChangeFirstName = (e: ChangeEvent<HTMLInputElement>) => {
+    setFullName({ ...fullName, firstName: e.target.value });
+  };
 
-    //setCount(count + 1);
-
-    // O state updater tem um parâmetro que representa a "fila" de valores
-    setCount((c) => c + 1);
-    setCount((c) => c + 1);
-    setCount((c) => c + 1);
+  const handleChangeLastName = (e: ChangeEvent<HTMLInputElement>) => {
+    setFullName({ ...fullName, lastName: e.target.value });
   };
 
   return (
     <div>
-      <h2>{count}</h2>
+      <input value={fullName.firstName} onChange={handleChangeFirstName} />
       <br />
-      <button onClick={handleCountClick}>Add +1</button>
+      <input value={fullName.lastName} onChange={handleChangeLastName} />
+      <br />
+      <br />
+      <h2>{fullName.firstName + " " + fullName.lastName}</h2>
     </div>
   );
 };
