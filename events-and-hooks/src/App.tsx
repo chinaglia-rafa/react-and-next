@@ -1,31 +1,27 @@
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 
 const App = () => {
-  const [logged, setLogged] = useState(false);
+  const [count, setCount] = useState(0);
 
-  const [value, setValue] = useState("");
+  const handleCountClick = () => {
+    // Comandos do tipo setCount() são agrupados e executados "por último"
+    // Isso significa que ele vai acumular as alterações em um lote e, apenas
+    // no final, renderiza a tela novamente.
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
+    //setCount(count + 1);
 
-  const handleClick = () => {
-    setLogged(!logged);
+    // O state updater tem um parâmetro que representa a "fila" de valores
+    setCount((c) => c + 1);
+    setCount((c) => c + 1);
+    setCount((c) => c + 1);
   };
 
   return (
     <div>
-      {logged && (
-        <>
-          <input value={value} onChange={handleChange} />
-          <br />
-          <h2>{value}</h2>
-          <br />
-        </>
-      )}
-
-      <button onClick={handleClick}>{logged ? "Ocultar" : "Mostrar"}</button>
+      <h2>{count}</h2>
+      <br />
+      <button onClick={handleCountClick}>Add +1</button>
     </div>
   );
 };
