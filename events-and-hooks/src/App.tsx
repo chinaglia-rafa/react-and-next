@@ -1,23 +1,31 @@
+import { ChangeEvent, useState } from "react";
 import "./App.css";
-import { useState } from "react";
 
 const App = () => {
-  // useState é responsável por representar o estado de um componente,
-  // e retorna seu valor e uma função para modificá-lo, permitindo
-  // que o DOM seja atualizado apenas onde é necessário ao ter seu
-  // valor modificado.
-  //
-  // O instrutor chamou de "memória do componente"
-  const [count, setCount] = useState(0);
+  const [logged, setLogged] = useState(false);
+
+  const [value, setValue] = useState("");
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
 
   const handleClick = () => {
-    setCount(count + 1);
+    setLogged(!logged);
   };
 
   return (
     <div>
-      <h2>{count}</h2>
-      <button onClick={handleClick}>Add +1</button>
+      {logged && (
+        <>
+          <input value={value} onChange={handleChange} />
+          <br />
+          <h2>{value}</h2>
+          <br />
+        </>
+      )}
+
+      <button onClick={handleClick}>{logged ? "Ocultar" : "Mostrar"}</button>
     </div>
   );
 };
