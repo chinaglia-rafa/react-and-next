@@ -1,4 +1,8 @@
-export const UserAvatar = () => {
+type Props = {
+  src: string;
+};
+
+export const UserAvatar = ({ src }: Props) => {
   // Um componente só pode retornar um elemento. Se você quiser retornar mais,
   // vai precisar utilizar fragments <> </>
   return (
@@ -6,11 +10,7 @@ export const UserAvatar = () => {
     <>
       {/* Toda tag deve ser fechada  */}
       {/* Eventos estão em camelCase  */}
-      <img
-        src="https://place-hold.it/300"
-        alt="Meu avatar"
-        onClick={() => alert("Clicado!")}
-      />
+      <img src={src} alt="Meu avatar" onClick={() => alert("Clicado!")} />
     </>
   );
 };

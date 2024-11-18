@@ -1,13 +1,31 @@
-import UserAge from "./UserAge";
-import UserEmail from "./UserEmail";
-import UserName from "./UserName";
+import { UserAge } from "./UserAge";
+import { UserAvatar } from "./UserAvatar";
+import { UserEmail } from "./UserEmail";
+import { UserName } from "./UserName";
+import { UserRoles } from "./UserRoles";
 
-export const UserInfo = () => {
+type Props = {
+  name: string;
+  email: string;
+  age: number;
+  avatar?: string;
+  roles: { id: number; title: string }[];
+};
+
+export const UserInfo = ({
+  name,
+  email,
+  age,
+  roles,
+  avatar = "https://place-hold.it/200",
+}: Props) => {
   return (
     <>
-      <UserName />
-      <UserEmail />
-      <UserAge />
+      <UserAvatar src={avatar} />
+      <UserName name={name} />
+      <UserEmail email={email} />
+      <UserAge age={age} />
+      <UserRoles roles={roles} />
     </>
   );
 };

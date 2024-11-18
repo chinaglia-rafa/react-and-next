@@ -1,3 +1,7 @@
-export default () => {
-  return <h4>Minha idade é: 31</h4>;
+type Props = {
+  age: number;
+};
+
+export const UserAge = ({ age }: Props) => {
+  return <h4>Minha idade é: {age}</h4>;
 };
