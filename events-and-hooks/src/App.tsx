@@ -1,78 +1,44 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+
 import "./App.css";
-import { Card } from "./components/Card";
 
 const App = () => {
-  const [tasks, setTasks] = useState<{ label: string; done: boolean }[]>([]);
+  const element = useRef<HTMLInputElement | null>(null);
 
-  const [inputValue, setInputValue] = useState("");
+  const [time, setTime] = useState(0);
 
-  const handleAdd = () => {
-    if (inputValue === "") return;
+  let intervalHandler = useRef(0);
 
-    // Método 1 - usando spread operator
-    setTasks([...tasks, { label: inputValue, done: false }]);
+  const handleStart = () => {
+    if (intervalHandler.current) handleStop();
 
-    // Método 2 - .concat()
-    //setTasks(tasks.concat([inputValue]));
+    const intervalId = setInterval(() => {
+      console.log("interval");
+      setTime((t) => t + 1);
+    }, 1000);
 
-    // Método 3 - usando uma constante auxiliar
-    //const newTasks = [...tasks];
-    //newTasks.push(inputValue);
-    //setTasks(newTasks);
-
-    setInputValue("");
+    intervalHandler.current = intervalId;
   };
 
-  const handleDelete = (key: number) => {
-    setTasks(tasks.filter((_, index) => index !== key));
+  const handleStop = () => {
+    clearInterval(intervalHandler.current);
   };
 
-  const handleEdit = (key: number) => {
-    const newTasks = [...tasks];
-    newTasks[key].done = !newTasks[key].done;
+  const handleClick = () => {
+    // current é como o useRef acessa o elemento em si
+    if (!element.current) return;
 
-    // No caso de states, é só lembrar de sempre editar coisas que não sejam o valor original
-    setTasks(newTasks);
+    element.current.focus();
   };
-
-  const [visible, setVisible] = useState(false);
 
   return (
     <div>
-      <h1>Minha lista de tarefas</h1>
+      <h2>{time}</h2>
 
-      <button onClick={() => setVisible(!visible)}>Mostrar / Ocultar</button>
-
-      {visible && <Card />}
-
-      <br />
-      <br />
-      <br />
-      <br />
-
-      <input
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-      />
-      <br />
-      <button onClick={handleAdd}>Adicionar tarefa</button>
-      <br />
-      <ul>
-        {tasks.map((task, key) => (
-          <li key={key}>
-            <button onClick={() => handleDelete(key)}>remover</button>
-            &nbsp; &nbsp; &nbsp;
-            {task.label}
-            &nbsp;
-            <input
-              type="checkbox"
-              onChange={() => handleEdit(key)}
-              checked={task.done}
-            />
-          </li>
-        ))}
-      </ul>
+      <div style={{ display: "flex", gap: 20 }}>
+        <button onClick={handleStart}>Começar</button>
+        <button onClick={handleStop}>Parar</button>
+      </div>
     </div>
   );
 };
