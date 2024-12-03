@@ -1,64 +1,24 @@
-import { useState } from "react";
+import axios from "axios";
 import "./App.css";
-import axios, { AxiosError } from "axios";
-
-type Post = {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-};
 
 function App() {
-  const [postsData, setPostsData] = useState<Post[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const controller = new AbortController();
 
-  const handleGetPost = async () => {
-    setLoading(true);
+  const handleClick = async () => {
+    await axios("https://jsonplaceholder.typicode.com/posts", {
+      signal: controller.signal,
+    });
+  };
 
-    try {
-      // usando fetch()
-      /*const posts = await fetch("https://jsonplaceholder.typicode.com/posts", {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
-
-      const postsJSON: Post[] = await posts.json();
-
-      setPostsData(postsJSON);
-
-      console.log(postsJSON);
-      */
-
-      // usando axios
-      const api = axios.create({
-        baseURL: "https://jsonplaceholder.typicode.com",
-      });
-
-      const posts = await api.get<Post[]>("posts");
-      setPostsData(posts.data);
-
-      console.log(posts.data);
-    } catch (error) {
-      const e = error as AxiosError;
-      console.log("Erro!", e.message);
-    }
-
-    setLoading(false);
+  const handleStop = () => {
+    controller.abort();
   };
 
   return (
     <div>
-      <button onClick={handleGetPost}>Fazer request GET</button>
+      <button onClick={handleClick}>FAZER REQUISIÇÃO</button>
       <br />
-      {loading && <span>Carregando...</span>}
-      <ol>
-        {postsData.map((item) => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ol>
+      <button onClick={handleStop}>ABORTAR!</button>
     </div>
   );
 }
